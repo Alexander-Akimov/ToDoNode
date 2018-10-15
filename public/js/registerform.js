@@ -33,6 +33,7 @@ function RegisterUser(username, password, email) {
     })
 }
 function LoginUser(password, email) {
+    var tokenKey = "tokenInfo";
     $.ajax({
         url: "api/account/login",
         contentType: "application/json",
@@ -41,9 +42,10 @@ function LoginUser(password, email) {
             email: email,
             password: password
         }),
-        success: function (result) {
-            
-           
+        success: function (data) {
+            sessionStorage.setItem(tokenKey, data.token);
+           // console.log(data.token);
+            window.location.replace('/home');
         },
         error: function (xhr, textStatus) {
             $('body').showMessage({

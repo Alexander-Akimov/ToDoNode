@@ -13,10 +13,10 @@ let generateAccessToken = (req, res, next) => {
   req.token = req.token || {};
   req.token = jwt.sign({
     id: req.user.id,
-    permissions : [
-      "status",
-      "user:read",
-      "user:write"
+    role: req.user.role,
+    permissions: [
+      {"user": "read"},
+      {"user": "write"}
     ]
   }, SECRET, {
       expiresIn: TOKENTIME // 90 days
@@ -25,10 +25,13 @@ let generateAccessToken = (req, res, next) => {
 }
 
 let respond = (req, res) => {
-  res.status(200).json({
+ // res.header('Authorization', "Bearer " + req.token);
+  //res.redirect('/home');
+
+ res.status(200).json({
     user: req.user.username,
     token: req.token
-  });
+  }); /**/
 }
 
 module.exports = {

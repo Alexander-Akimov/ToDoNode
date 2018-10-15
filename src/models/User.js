@@ -5,7 +5,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var UserSchema = new Schema({
     email: String,
     password: String,
-    role: Number
+    role: { type: Number, default: 1, required: true }
 });
 
 UserSchema.plugin(passportLocalMongoose);
