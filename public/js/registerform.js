@@ -49,7 +49,7 @@ function LoginUser(password, email) {
         },
         error: function (xhr, textStatus) {
             $('body').showMessage({
-                thisMessage: [xhr.responseJSON],
+                thisMessage: [xhr.responseJSON.message],
                 displayNavigation: false,
                 autoClose: true,
                 delayTime: 3000

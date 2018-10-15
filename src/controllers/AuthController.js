@@ -29,13 +29,16 @@ api.post("/register", (req, res) => {
 
 api.post('/login', (req, res, next) => {
     UserDataExt.findUserByEmail(req.body.email, (err, userData) => {
+        if(userData == null) {
+            res.status(401).json({ message: `Email or password invalid, please check your credentials` });
+        }
         if (err) {
             res.status(409).json({ message: `An error occured: ${err.message}` });
         } else {
             next();
         }
     });
-}, passport.authenticate('local', { session: false, scope: [], failWithError: true }),
+}, passport.authenticate('local', { session: false, scope: [], failWithError: false }),
     (err, req, res, next) => {
         if (err) {
             res.status(401).json({ message: `Email or password invalid, please check your credentials` });
