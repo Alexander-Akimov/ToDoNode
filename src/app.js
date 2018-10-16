@@ -15,8 +15,6 @@ require("./config/passport")(passport);
 //routing
 require('./config/routes')(app, passport);
 
-
-
 app.listen(3000, function () {
     console.log("Сервер ожидает подключения...");
 });
