@@ -1,5 +1,5 @@
-var jwt = require('jsonwebtoken');
-var expressJwt = require('express-jwt');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 
 const TOKENTIME = 60 * 60 * 24 * 90;
 
@@ -7,7 +7,7 @@ const SECRET = "nodeJS ToDo Test";
 
 let authenticate = expressJwt({ secret: SECRET });
 
-var unAuthHandle = function (err, req, res, next) {
+let unAuthHandle = function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'invalid token...' });
   }
@@ -34,9 +34,6 @@ let generateAccessToken = (req, res, next) => {
 }
 
 let respond = (req, res) => {
-  // res.header('Authorization', "Bearer " + req.token);
-  //res.redirect('/home');
-
   res.status(200).json({
     user: req.user.username,
     token: req.token

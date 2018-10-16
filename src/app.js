@@ -1,8 +1,8 @@
 
-var express = require('express');
+const express = require('express');
 const passport = require('passport');
 
-let app = express();
+const app = express();
 
 require('./config/express')(app, passport);
 

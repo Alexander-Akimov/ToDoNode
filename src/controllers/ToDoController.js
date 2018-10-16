@@ -1,24 +1,23 @@
-var Todo = require("../models/todo");
+const todoService = require("../services/todoservice");
 
-exports.add = (req, res) => {
-    var todo = new Todo({
+exports.add = async (req, res) => {
+    let todo = {
         title: req.body.title,
         description: req.body.description,
         priority: req.body.priority,
         userId: req.user.id
-    });
-    // Todo.create()
-    todo.save(err => {
-        if (err) {
-            res.status(500).json({ message: err });
-        }
-        else {
-            res.status(200).json({ code: 1, message: "Todo saved successfully" });
-        }
-    });
+    };
+    
+    try {
+        var let = await todoService.create(todo);
+
+        res.status(200).json({ code: 1, message: "Todo saved successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 
     let id = req.body.id;
     let updatedTodoObj = {
@@ -27,63 +26,41 @@ exports.update = (req, res) => {
         priority: req.body.priority,
         status: req.body.status
     };
-    Todo.findByIdAndUpdate(id, updatedTodoObj, function (err, user) {
-        if (err) {
-            res.status(500).json({ message: err });
-        }
-        else {
-            res.status(200).json({ code: 1, message: "Todo saved successfully" });
-        }
-    });
-};
 
-var getCriteria = (columns, order) => {
+    try {
+        let user = await todoService.update(id, updatedTodoObj);
 
-    var colNum = 0;
-    var sort = 1
-    if (order.length > 0) {
-        colNum = order[0].column;
-        sort = order[0].dir == 'asc'? 1 : -1;
+        res.status(200).json({ code: 1, message: "Todo saved successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err });
     }
-
-    if (columns.length >= colNum)
-        return [columns[colNum].data, sort];
-
-    return {};
 };
 
-exports.getAll = (req, res) => {
+exports.getAll = async (req, res) => {
 
-    /*let field = req.query.field;
-    let order = req.query.order;*/
-
-    let columns = req.query.columns;
-    let order = req.query.order;
-
-     var sortCriteria = getCriteria(columns, order);
-
-    //var permisList = req.user.permissions;
     let role = req.user.role;
 
-    var filter = role == 2 ? {} : { userId: req.user.id }; // role == 2 - admin, role == 1 - user
+    let selectOpts = {
+        columns: req.query.columns,
+        order: req.query.order
+    };
 
-    Todo.find(filter)
-        .sort([sortCriteria])
-        .exec((err, todoDocs) => {
-            if (err) {
-                res.status(500).json({ message: err });
-            }
-            res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
-        });
+    try {
+        let todoDocs = await todoService.getAll(selectOpts, role);      
+
+        res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
 };
 
-exports.getById = (req, res) => {
+exports.getById = async (req, res) => {
     let id = req.params.id;
+    try {
+        let todo = await todoService.findById(id);
 
-    Todo.findById(id, (err, todo) => {
-        if (err) {
-            res.status(500).json({ message: err });
-        }
         res.status(200).json(todo);
-    });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
 };
