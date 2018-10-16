@@ -7,6 +7,15 @@ const SECRET = "nodeJS ToDo Test";
 
 let authenticate = expressJwt({ secret: SECRET });
 
+var unAuthHandle = function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'invalid token...' });
+  }
+  else if (err) {
+    res.status(401).json({ message: `Email or password invalid, please check your credentials` });
+  }
+};
+
 //.unless({path:['/login','/', '/favicon.ico']});
 
 let generateAccessToken = (req, res, next) => {
@@ -15,8 +24,8 @@ let generateAccessToken = (req, res, next) => {
     id: req.user.id,
     role: req.user.role,
     permissions: [
-      {"user": "read"},
-      {"user": "write"}
+      { "user": "read" },
+      { "user": "write" }
     ]
   }, SECRET, {
       expiresIn: TOKENTIME // 90 days
@@ -25,10 +34,10 @@ let generateAccessToken = (req, res, next) => {
 }
 
 let respond = (req, res) => {
- // res.header('Authorization', "Bearer " + req.token);
+  // res.header('Authorization', "Bearer " + req.token);
   //res.redirect('/home');
 
- res.status(200).json({
+  res.status(200).json({
     user: req.user.username,
     token: req.token
   }); /**/
@@ -37,5 +46,6 @@ let respond = (req, res) => {
 module.exports = {
   authenticate,
   generateAccessToken,
+  unAuthHandle,
   respond
 }

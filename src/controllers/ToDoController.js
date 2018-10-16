@@ -1,10 +1,6 @@
-var express = require('express');
-var guard = require('express-jwt-permissions')()
-
 var Todo = require("../models/todo");
 
-var api = express.Router();
-api.post('/add', (req, res) => {
+exports.add = (req, res) => {
     var todo = new Todo({
         title: req.body.title,
         description: req.body.description,
@@ -20,9 +16,9 @@ api.post('/add', (req, res) => {
             res.status(200).json({ code: 1, message: "Todo saved successfully" });
         }
     });
-});
+};
 
-api.put('/', (req, res) => {
+exports.update = (req, res) => {
 
     let id = req.body.id;
     let updatedTodoObj = {
@@ -39,7 +35,8 @@ api.put('/', (req, res) => {
             res.status(200).json({ code: 1, message: "Todo saved successfully" });
         }
     });
-});
+};
+
 var getCriteria = (columns, order) => {
 
     var colNum = 0;
@@ -55,7 +52,7 @@ var getCriteria = (columns, order) => {
     return {};
 };
 
-api.get('/all', (req, res) => {
+exports.getAll = (req, res) => {
 
     /*let field = req.query.field;
     let order = req.query.order;*/
@@ -78,9 +75,9 @@ api.get('/all', (req, res) => {
             }
             res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
         });
-});
+};
 
-api.get('/:id', (req, res) => {
+exports.getById = (req, res) => {
     let id = req.params.id;
 
     Todo.findById(id, (err, todo) => {
@@ -89,6 +86,4 @@ api.get('/:id', (req, res) => {
         }
         res.status(200).json(todo);
     });
-});
-
-module.exports = api;
+};

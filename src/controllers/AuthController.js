@@ -1,13 +1,8 @@
 var passport = require("passport");
 var User = require("../models/user");
 var UserDataExt = require('../extensions/userData-ext');
-var express = require('express')
 
-
-var authMiddleware = require('../middleware/authMiddleware');
-
-var api = express.Router();
-api.post("/register", (req, res) => {
+exports.register = (req, res) => {
     UserDataExt.findUserByEmail(req.body.email, (err, userData) => {
         if (err) {
             res.status(409).json({ message: `An error occured: ${err.message}` });
@@ -25,9 +20,9 @@ api.post("/register", (req, res) => {
             });
         }
     });
-});
+};
 
-api.post('/login', (req, res, next) => {
+exports.login = (req, res, next) => {
     UserDataExt.findUserByEmail(req.body.email, (err, userData) => {
         if(userData == null) {
             res.status(401).json({ message: `Email or password invalid, please check your credentials` });
@@ -38,13 +33,4 @@ api.post('/login', (req, res, next) => {
             next();
         }
     });
-}, passport.authenticate('local', { session: false, scope: [], failWithError: false }),
-    (err, req, res, next) => {
-        if (err) {
-            res.status(401).json({ message: `Email or password invalid, please check your credentials` });
-        }
-    }, authMiddleware.generateAccessToken, authMiddleware.respond
-);
-
-
-module.exports = api;
+};

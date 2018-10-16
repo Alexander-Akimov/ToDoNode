@@ -1,24 +1,19 @@
-var hbs = require("hbs");
-var bodyParser = require('body-parser');
+
 var express = require('express');
-var routes = require('./routes');
+const passport = require('passport');
 
 let app = express();
-app.set("view engine", "hbs");
 
-app.use(bodyParser.json()); //{ limit: config.bodyLimit }
-
-app.use(express.static(__dirname + "/../public"));
-app.set('views', __dirname + '/views')
+require('./config/express')(app, passport);
 
 //db connection config 
 require("./config/mongodb")();
 
 //passport config
-require("./config/passport")(app);
+require("./config/passport")(passport);
 
 //routing
-app.use("/", routes);
+require('./config/routes')(app, passport);
 
 
 
