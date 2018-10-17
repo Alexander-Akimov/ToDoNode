@@ -1,20 +1,22 @@
-
-//import express from 'express';
-const passport = require('passport');
-const express = require('express');
+import configExpress from './config/express';
+import configMongoDB from "./config/mongodb";
+import configPassport from "./config/passport";
+import configRouting from "./config/routes";
+import express from 'express';
+import passport from 'passport';
 
 const app = express();
 
-require('./config/express')(app, passport);
+configExpress(app, passport);
 
 //db connection config 
-require("./config/mongodb")();
+configMongoDB();
 
 //passport config
-require("./config/passport")(passport);
+configPassport(passport);
 
 //routing
-require('./config/routes')(app, passport);
+configRouting(app, passport);
 
 app.listen(3000, function () {
     console.log("Сервер ожидает подключения...");

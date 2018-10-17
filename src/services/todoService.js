@@ -1,44 +1,50 @@
-const Todo = require("../models/todo");
+import Todo from "../models/todo";
 
-exports.create = async (todo) => {
-    let doc = await Todo.create(todo);
-    return doc;
-};
-
-exports.update = async (id, updatedTodoObj) => {
-    let user = await Todo.findByIdAndUpdate(id, updatedTodoObj);
-    return user;
-};
-
-var getCriteria = (columns, order) => {
-
-    let colNum = 0;
-    let sort = 1
-    if (order.length > 0) {
-        colNum = order[0].column;
-        sort = order[0].dir == 'asc' ? 1 : -1;
+class TodoService {
+    static async create(todo) {
+        let doc = await Todo.create(todo);
+        return doc;
     }
 
-    if (columns.length >= colNum)
-        return [columns[colNum].data, sort];
+    static async update(id, updatedTodoObj) {
+        let user = await Todo.findByIdAndUpdate(id, updatedTodoObj);
+        return user;
+    }
 
-    return {};
-};
+    static getCriteria(columns, order) {
 
-exports.getAll = async (selectOpts, role) => {
+        let colNum = 0;
+        let sort = 1
+        if (order.length > 0) {
+            colNum = order[0].column;
+            sort = order[0].dir == 'asc' ? 1 : -1;
+        }
 
-    let sortCriteria = getCriteria(selectOpts.columns, selectOpts.order);
+        if (columns.length >= colNum)
+            return [columns[colNum].data, sort];
 
-    let filter = role == 2 ? {} : { userId: req.user.id }; // role == 2 - admin, role == 1 - user
+        return {};
+    }
 
-    let todoDocs = await Todo.find(filter)
-        .sort([sortCriteria]).
-        exec();
+    static async getAll(selectOpts, role) {
 
-    return todoDocs;
-};
+        let sortCriteria = TodoService.getCriteria(selectOpts.columns, selectOpts.order);
+        let filter = role == 2 ? {} : { userId: selectOpts.id }; // role == 2 - admin, role == 1 - user
 
-exports.getById = async (id) => {
-    let todo = await Todo.findById(id);
-    return todo;
-};
+        var todoDocs = [];
+
+        todoDocs = await Todo.find(filter)
+            .sort([sortCriteria])
+            .exec();
+
+        return todoDocs;
+
+    }
+
+    static async getById(id) {
+        let todo = await Todo.findById(id);
+        return todo;
+    }
+}
+
+export default TodoService;

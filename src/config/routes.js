@@ -1,11 +1,12 @@
-'use strict';
 
-const account = require("../controllers/AuthController");
-const todo = require("../controllers/ToDoController");
-const home = require("../controllers/HomeController");
-const { generateAccessToken, authenticate, respond, unAuthHandle } = require("../middleware/authMiddleware");
+import { authenticate, generateAccessToken, respond, unAuthHandle } from "../middleware/authMiddleware";
+import { assume404, errorHandle } from "../middleware/errorHandleMiddleware";
 
-module.exports = function (app, passport) {
+import account from "../controllers/AuthController";
+import home from "../controllers/HomeController";
+import todo from "../controllers/ToDoController";
+
+export default (app, passport) => {
 
   app.get("/home", home.get);
 
@@ -20,4 +21,10 @@ module.exports = function (app, passport) {
   app.put("/api/todo/", authenticate, unAuthHandle, todo.update);
   app.get("/api/todo/all", authenticate, unAuthHandle, todo.getAll);
   app.get("/api/todo/:id", authenticate, unAuthHandle, todo.getById);
+
+  // Error handling
+  app.use(errorHandle);
+
+  // assume 404 since no middleware responded
+  app.use(assume404);
 };

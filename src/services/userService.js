@@ -1,16 +1,19 @@
 
-const User = require("../models/user");
+import User from "../models/user";
 
-exports.getByEmail = async (email) => {
+class UserService {
+    static async getByEmail (email) {
 
-    let userData = await User.findOne({ 'username': email });
+        let userData = await User.findOne({ 'username': email });
 
-    return userData;
-};
+        return userData;
+    }
 
-exports.register = async (user, pass) => {
-    
-    let account = await User.register(new User(user), pass);
+    static async register (user, pass) {
 
-    return account;
-};
+        let account = await User.register(new User(user), pass);
+
+        return account;
+    }
+}
+export default UserService;

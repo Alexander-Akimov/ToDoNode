@@ -1,8 +1,9 @@
-const express = require('express');
-var hbs = require("hbs");
-var bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
+import express from 'express';
+import hbs from "hbs";
 
-module.exports = function (app, passport) {
+
+export default  (app, passport) => {
 
     app.set("view engine", "hbs");
 
@@ -14,4 +15,4 @@ module.exports = function (app, passport) {
 
     app.use(passport.initialize());
     // app.use(passport.session());
-};
+}

@@ -1,9 +1,12 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-module.exports = () => {
+export default async () => {
     mongoose.Promise = global.Promise;
-    mongoose.connect("mongodb://localhost:27017/node-auth", { useNewUrlParser: true })
-        .then(() => console.log('MongoDB connection succesful'))
-        .catch((err) => console.error(err));
-    mongoose.set('useCreateIndex', true);
+    try {
+        await mongoose.connect("mongodb://localhost:27017/node-auth",
+         { useNewUrlParser: true, useCreateIndex: true });
+        console.log('MongoDB connection succesful');
+    } catch (err) {
+        console.error(err);
+    }
 }

@@ -1,66 +1,72 @@
-const todoService = require("../services/todoservice");
+import todoService from "../services/todoservice";
 
-exports.add = async (req, res) => {
-    let todo = {
-        title: req.body.title,
-        description: req.body.description,
-        priority: req.body.priority,
-        userId: req.user.id
-    };
+class TodoController {
+    static async add(req, res, next) {
+        let todo = {
+            title: req.body.title,
+            description: req.body.description,
+            priority: req.body.priority,
+            userId: req.user.id
+        };
 
-    try {
-        let result = await todoService.create(todo);
+        try {
+            let result = await todoService.create(todo);
 
-        res.status(200).json({ code: 1, message: "Todo saved successfully" });
-    } catch (err) {
-        res.status(500).json({ message: err });
+            res.status(200).json({ code: 1, message: "Todo saved successfully" });
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-exports.update = async (req, res) => {
+    static async update(req, res, next) {
 
-    let id = req.body.id;
-    let updatedTodoObj = {
-        title: req.body.title,
-        description: req.body.description,
-        priority: req.body.priority,
-        status: req.body.status
-    };
+        let id = req.body.id;
+        let updatedTodoObj = {
+            title: req.body.title,
+            description: req.body.description,
+            priority: req.body.priority,
+            status: req.body.status
+        };
 
-    try {
-        let user = await todoService.update(id, updatedTodoObj);
+        try {
+            let user = await todoService.update(id, updatedTodoObj);
 
-        res.status(200).json({ code: 1, message: "Todo saved successfully" });
-    } catch (err) {
-        res.status(500).json({ message: err });
+            res.status(200).json({ code: 1, message: "Todo saved successfully" });
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-exports.getAll = async (req, res) => {
+    static async getAll(req, res, next) {
 
-    let role = req.user.role;
+        let role = req.user.role;
 
-    let selectOpts = {
-        columns: req.query.columns,
-        order: req.query.order
-    };
+        let selectOpts = {
+            columns: req.query.columns,
+            order: req.query.order,
+            id: req.user.id
+        };
 
-    try {
-        let todoDocs = await todoService.getAll(selectOpts, role);
+        try {
+            let todoDocs = await todoService.getAll(selectOpts, role);
 
-        res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
-    } catch (err) {
-        res.status(500).json({ message: err });
+            res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
+
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-exports.getById = async (req, res) => {
-    let id = req.params.id;
-    try {
-        let todo = await todoService.findById(id);
+    static async getById(req, res, next) {
+        let id = req.params.id;
+        try {
+            let todo = await todoService.findById(id);
 
-        res.status(200).json(todo);
-    } catch (err) {
-        res.status(500).json({ message: err });
+            res.status(200).json(todo);
+        } catch (err) {
+            next(err);
+        }
     }
-};
+}
+
+export default TodoController;

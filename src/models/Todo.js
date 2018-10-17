@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var User = require("./user");
+//import User from "./user";
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const todoSchema = new Schema({
@@ -12,4 +13,8 @@ const todoSchema = new Schema({
     priority: { type: Number, default: 0, required: true }
 });
 
-module.exports = mongoose.model('Todo', todoSchema);
+let Todo = mongoose.model('Todo', todoSchema);
+
+//export default mongoose.model('Todo', todoSchema);
+
+export default Todo;

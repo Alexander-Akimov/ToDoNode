@@ -1,5 +1,7 @@
 
-
-exports.get =  ( req, res) => {
-    res.render("home.hbs");
-};
+class HomeController {
+    static get (req, res) {
+        res.render("home.hbs");
+    }
+}
+export default HomeController;
