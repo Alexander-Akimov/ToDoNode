@@ -6,6 +6,7 @@
 Используемые технологии: Express, MongoDB, JWT.
 
 Команда запуска: npm start
+
 Проверка кода: eslint src
 
 На данный момент готов backend:
