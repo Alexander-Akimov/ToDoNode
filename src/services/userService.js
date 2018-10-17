@@ -10,7 +10,7 @@ exports.getByEmail = async (email) => {
 
 exports.register = async (user, pass) => {
     
-    let account = User.register(new User(user), pass);
+    let account = await User.register(new User(user), pass);
 
     return account;
 };

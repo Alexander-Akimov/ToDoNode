@@ -7,9 +7,9 @@ exports.add = async (req, res) => {
         priority: req.body.priority,
         userId: req.user.id
     };
-    
+
     try {
-        var let = await todoService.create(todo);
+        let result = await todoService.create(todo);
 
         res.status(200).json({ code: 1, message: "Todo saved successfully" });
     } catch (err) {
@@ -46,7 +46,7 @@ exports.getAll = async (req, res) => {
     };
 
     try {
-        let todoDocs = await todoService.getAll(selectOpts, role);      
+        let todoDocs = await todoService.getAll(selectOpts, role);
 
         res.status(200).json({ data: todoDocs, recordsTotal: todoDocs.length });
     } catch (err) {

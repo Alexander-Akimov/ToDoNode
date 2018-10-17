@@ -1,8 +1,9 @@
+'use strict';
 
 const account = require("../controllers/AuthController");
 const todo = require("../controllers/ToDoController");
 const home = require("../controllers/HomeController");
-const { generateAccessToken, authenticate, respond, unAuthHandle } = require('../middleware/authMiddleware');
+const { generateAccessToken, authenticate, respond, unAuthHandle } = require("../middleware/authMiddleware");
 
 module.exports = function (app, passport) {
 
