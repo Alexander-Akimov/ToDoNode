@@ -12,6 +12,8 @@
   - PUT: `/api/todo` - изменение задачи
   - GET: `/api/todo/all` - список всех задач
   - GET: `/api/todo/:id` - поиск задачи по id
+  - DELETE: `/api/todo/:id` - удаление задачи по id
+  
   - POST: `/api/account/register` - регистрация
   - POST: `/api/account/login` - аутентификация
   - GET: `/home` - страница со списком задач вошедшего в систему пользователя
