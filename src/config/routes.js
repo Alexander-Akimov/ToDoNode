@@ -1,6 +1,7 @@
 
-import { authenticate, generateAccessToken, respond, unAuthHandle } from "../middleware/authMiddleware";
 import { assume404, errorHandle } from "../middleware/errorHandleMiddleware";
+import { authenticate, generateAccessToken, respond, unAuthHandle } from "../middleware/authMiddleware";
+
 
 import account from "../controllers/AuthController";
 import home from "../controllers/HomeController";
@@ -17,10 +18,15 @@ export default (app, passport) => {
     passport.authenticate('local', { session: false, scope: [], failWithError: false }),
     unAuthHandle, generateAccessToken, respond);
 
+
+
   app.post("/api/todo/add", authenticate, unAuthHandle, todo.add);
   app.put("/api/todo/", authenticate, unAuthHandle, todo.update);
   app.get("/api/todo/all", authenticate, unAuthHandle, todo.getAll);
   app.get("/api/todo/:id", authenticate, unAuthHandle, todo.getById);
+  app.delete("/api/todo/:id", authenticate, unAuthHandle, todo.deleteById);
+
+
 
   // Error handling
   app.use(errorHandle);

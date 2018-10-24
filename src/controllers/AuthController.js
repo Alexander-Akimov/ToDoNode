@@ -1,3 +1,5 @@
+'use strict'
+
 import userService from "../services/userService";
 
 class AuthController {

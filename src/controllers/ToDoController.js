@@ -12,7 +12,7 @@ class TodoController {
         try {
             let result = await todoService.create(todo);
 
-            res.status(200).json({ code: 1, message: "Todo saved successfully" });
+            res.status(200).json({ code: 1, message: `Todo with id: ${result._id} saved successfully` });
         } catch (err) {
             next(err);
         }
@@ -60,9 +60,21 @@ class TodoController {
     static async getById(req, res, next) {
         let id = req.params.id;
         try {
-            let todo = await todoService.findById(id);
+            let todo = await todoService.getById(id);
 
             res.status(200).json(todo);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async deleteById(req, res, next) {
+        let id = req.params.id;
+        try {
+            let result = await todoService.deleteById(id);
+            
+            res.status(200).json({ code: 1, message: `Todo ${id} deleted successfully` })
+
         } catch (err) {
             next(err);
         }

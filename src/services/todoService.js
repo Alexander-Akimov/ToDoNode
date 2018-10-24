@@ -45,6 +45,11 @@ class TodoService {
         let todo = await Todo.findById(id);
         return todo;
     }
+
+    static async deleteById(id) {
+        let result = await Todo.deleteOne({ _id: id });
+        return result;
+    }
 }
 
 export default TodoService;
