@@ -33,6 +33,12 @@ class AuthController {
             next(err);
         }
     }
+
+    static logout(req, res, next) {
+        req.logout();
+        //res.redirect('/');
+        res.status(200).json({ message: 'Successful user logout' });
+    }
 }
 
 export default AuthController;

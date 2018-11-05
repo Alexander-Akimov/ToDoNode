@@ -18,6 +18,7 @@ export default (app, passport) => {
     passport.authenticate('local', { session: false, scope: [], failWithError: false }),
     unAuthHandle, generateAccessToken, respond);
 
+  app.get("/api/account/logout", account.logout);
 
 
   app.post("/api/todo/add", authenticate, unAuthHandle, todo.add);
